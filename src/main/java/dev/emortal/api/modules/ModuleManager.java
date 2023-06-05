@@ -22,12 +22,12 @@ public final class ModuleManager {
     private final Map<Class<? extends Module>, Module> modules = new ConcurrentHashMap<>();
 
     public ModuleManager(@NotNull Map<Class<? extends Module>, LoadableModule> modules) {
-        List<LoadableModule> sortedModules = sortModules(modules.values());
+        final List<LoadableModule> sortedModules = sortModules(modules.values());
 
-        for (LoadableModule loadable : sortedModules) {
-            ModuleData data = loadable.clazz().getDeclaredAnnotation(ModuleData.class);
+        for (final LoadableModule loadable : sortedModules) {
+            final ModuleData data = loadable.clazz().getDeclaredAnnotation(ModuleData.class);
 
-            Module module;
+            final Module module;
             try {
                 module = loadable.creator().create(new ModuleEnvironment(data, this));
             } catch (Exception exception) {
@@ -35,9 +35,9 @@ public final class ModuleManager {
                 continue;
             }
 
-            Instant loadStart = Instant.now();
-            boolean loadResult = module.onLoad();
-            Duration loadDuration = Duration.between(loadStart, Instant.now());
+            final Instant loadStart = Instant.now();
+            final boolean loadResult = module.onLoad();
+            final Duration loadDuration = Duration.between(loadStart, Instant.now());
 
             if (loadResult) {
                 this.modules.put(loadable.clazz(), module);
@@ -55,24 +55,35 @@ public final class ModuleManager {
     }
 
     public void onReady() {
-        for (Module module : modules.values()) {
-            Instant readyStart = Instant.now();
+        for (final Module module : modules.values()) {
+            final Instant readyStart = Instant.now();
             module.onReady();
-            Duration readyDuration = Duration.between(readyStart, Instant.now());
+            final Duration readyDuration = Duration.between(readyStart, Instant.now());
 
             LOGGER.info("Fired onReady for module {} in {}ms", module.getClass().getSimpleName(), readyDuration.toMillis());
         }
     }
 
-    private List<LoadableModule> sortModules(Collection<LoadableModule> modules) throws IllegalArgumentException {
-        Graph<LoadableModule, DefaultEdge> graph = new DirectedAcyclicGraph<>(DefaultEdge.class);
+    public void onUnload() {
+        for (final Module module : modules.values()) {
+            final Instant unloadStart = Instant.now();
+            module.onUnload();
+            final Duration unloadDuration = Duration.between(unloadStart, Instant.now());
 
-        for (LoadableModule module : modules) {
+            LOGGER.info("Unloaded module {} in {}ms", module.getClass().getSimpleName(), unloadDuration.toMillis());
+        }
+    }
+
+    private List<LoadableModule> sortModules(Collection<LoadableModule> modules) throws IllegalArgumentException {
+        final Graph<LoadableModule, DefaultEdge> graph = new DirectedAcyclicGraph<>(DefaultEdge.class);
+
+        for (final LoadableModule module : modules) {
             graph.addVertex(module);
 
-            for (Class<? extends Module> dependency : module.clazz().getDeclaredAnnotation(ModuleData.class).softDependencies()) {
+            final ModuleData data = module.clazz().getDeclaredAnnotation(ModuleData.class);
+            for (final Class<? extends Module> dependency : data.softDependencies()) {
                 // find the LoadableModule for the dependency's Class
-                LoadableModule dependencyModule = modules.stream()
+                final LoadableModule dependencyModule = modules.stream()
                         .filter(targetModule -> targetModule.clazz().equals(dependency))
                         .findFirst()
                         .orElse(null);
@@ -86,13 +97,11 @@ public final class ModuleManager {
             }
         }
 
-        TopologicalOrderIterator<LoadableModule, DefaultEdge> sortedIterator = new TopologicalOrderIterator<>(graph);
-        List<LoadableModule> sorted = new java.util.ArrayList<>();
-
+        final TopologicalOrderIterator<LoadableModule, DefaultEdge> sortedIterator = new TopologicalOrderIterator<>(graph);
+        final List<LoadableModule> sorted = new java.util.ArrayList<>();
         sortedIterator.forEachRemaining(sorted::add);
 
         LOGGER.info("Loading modules: [{}]", sorted.stream().map(module -> module.clazz().getSimpleName()).collect(Collectors.joining(", ")));
-
         return sorted;
     }
 }
