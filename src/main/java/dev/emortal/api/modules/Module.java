@@ -4,10 +4,10 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class Module {
 
-    protected final ModuleManager moduleManager;
+    protected final ModuleEnvironment environment;
 
     protected Module(@NotNull ModuleEnvironment environment) {
-        this.moduleManager = environment.moduleManager();
+        this.environment = environment;
     }
 
     public abstract boolean onLoad();
