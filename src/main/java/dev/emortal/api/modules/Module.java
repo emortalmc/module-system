@@ -1,6 +1,7 @@
 package dev.emortal.api.modules;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class Module {
 
@@ -8,6 +9,10 @@ public abstract class Module {
 
     protected Module(@NotNull ModuleEnvironment environment) {
         this.environment = environment;
+    }
+
+    protected <T extends Module> @Nullable T getModule(@NotNull Class<T> type) {
+        return environment.moduleProvider().getModule(type);
     }
 
     public abstract boolean onLoad();
