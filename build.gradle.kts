@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "dev.emortal.api"
-version = "1.1"
+version = "1.0.0"
 
 repositories {
     mavenCentral()
