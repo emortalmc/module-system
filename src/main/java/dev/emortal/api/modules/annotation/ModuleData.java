@@ -1,4 +1,4 @@
-package dev.emortal.api.modules;
+package dev.emortal.api.modules.annotation;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -9,7 +9,5 @@ public @interface ModuleData {
 
     @NotNull String name();
 
-    boolean required();
-
-    @NotNull Class<? extends Module>@NotNull[] softDependencies() default {};
+    @NotNull Dependency[] dependencies() default {};
 }

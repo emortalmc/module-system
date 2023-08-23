@@ -1,6 +1,6 @@
 package dev.emortal.api.modules.env;
 
-import dev.emortal.api.modules.ModuleData;
+import dev.emortal.api.modules.annotation.ModuleData;
 import dev.emortal.api.modules.ModuleProvider;
 import org.jetbrains.annotations.NotNull;
 

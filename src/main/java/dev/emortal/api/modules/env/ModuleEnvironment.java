@@ -1,6 +1,6 @@
 package dev.emortal.api.modules.env;
 
-import dev.emortal.api.modules.ModuleData;
+import dev.emortal.api.modules.annotation.ModuleData;
 import dev.emortal.api.modules.ModuleProvider;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,10 +18,4 @@ public interface ModuleEnvironment {
      * Provides access to existing modules to facilitate module dependencies.
      */
     @NotNull ModuleProvider moduleProvider();
-
-    @FunctionalInterface
-    interface Provider {
-
-        @NotNull ModuleEnvironment create(@NotNull ModuleData data, @NotNull ModuleProvider moduleProvider);
-    }
 }

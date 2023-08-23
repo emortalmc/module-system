@@ -1,6 +1,7 @@
 plugins {
     `java-library`
     `maven-publish`
+    jacoco
 }
 
 group = "dev.emortal.api"
@@ -15,6 +16,9 @@ dependencies {
     api("org.jetbrains:annotations:24.0.1")
 
     implementation("org.jgrapht:jgrapht-core:1.5.2")
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.0")
 }
 
 java {
@@ -24,6 +28,15 @@ java {
 
     withSourcesJar()
     withJavadocJar()
+}
+
+tasks {
+    test {
+        useJUnitPlatform()
+    }
+    jacocoTestReport {
+        dependsOn(test)
+    }
 }
 
 publishing {
