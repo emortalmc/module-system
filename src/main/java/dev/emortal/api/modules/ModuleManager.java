@@ -38,7 +38,7 @@ public final class ModuleManager implements ModuleProvider {
 
     private final Map<Class<? extends Module>, Module> modules = new ConcurrentHashMap<>();
 
-    public ModuleManager(@NotNull ModuleCandidateResolver candidateResolver, @NotNull ModuleSorter sorter,
+    private ModuleManager(@NotNull ModuleCandidateResolver candidateResolver, @NotNull ModuleSorter sorter,
                           @NotNull ModuleEnvironmentProvider environmentProvider) {
         this.candidateResolver = candidateResolver;
         this.sorter = sorter;
