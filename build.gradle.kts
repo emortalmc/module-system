@@ -5,20 +5,20 @@ plugins {
 }
 
 group = "dev.emortal.api"
-version = "1.1.0"
+version = "1.1.1"
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    api("org.slf4j:slf4j-api:2.0.7")
-    api("org.jetbrains:annotations:24.0.1")
+    api("org.slf4j:slf4j-api:2.0.13")
+    api("org.jetbrains:annotations:24.1.0")
 
     implementation("org.jgrapht:jgrapht-core:1.5.2")
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.0")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.2")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.2")
 }
 
 java {
