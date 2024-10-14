@@ -13,7 +13,7 @@ repositories {
 
 dependencies {
     api("org.slf4j:slf4j-api:2.0.13")
-    api("org.jetbrains:annotations:24.1.0")
+    api("org.jetbrains:annotations:26.0.1")
 
     implementation("org.jgrapht:jgrapht-core:1.5.2")
 
